@@ -9,8 +9,6 @@ const data = [
   { name: "Motor Insurance", value: 3000, color: "#9B84D4" },
 ];
 
-const COLORS = ["#2563eb", "#10b981", "#fbbf24", "#ef4444", "#8b5cf6"];
-
 export default function ProductSales() {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md">
@@ -21,25 +19,31 @@ export default function ProductSales() {
         Sales between all the products
       </p>
 
-      <div className="flex items-center mt-4">
-        
-          <PieChart width={280} height={280}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={70}
-              outerRadius={110}
-              dataKey="value"
-            >
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        
-
+      <div className="flex items-center mt-[50px] justify-between">
+        {/* Pie Chart */}
+        <div className="max-w-[250px] w-full h-[250px] relative">
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart width={250} height={250}>
+              <Pie
+                data={data}
+                cx="50%"
+                cy="50%"
+                innerRadius={70}
+                outerRadius={110}
+                dataKey="value"
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex flex-col items-center absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
+            <span className="text-[18px] font-bold text-[#222529]">1,234</span>
+            <span className="text-[14px] text-[#8C97A7]">$100,000.00</span>
+          </div>
+        </div>
         <div className="w-[200px]">
           {data.map((item, index) => (
             <div key={index} className="flex items-center justify-between mb-1">
