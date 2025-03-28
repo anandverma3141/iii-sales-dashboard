@@ -1,74 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import axios from 'axios';
- 
- 
+import axios from "axios";
+import Pagination from "./Paginations";
+
 const PolicyTable = () => {
   const [accessToken, setAccessToken] = useState(null);
   const [data, setData] = useState(null);
- 
+  const [showTableData, setShowTableData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    if (data) {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      setTotalPages(data.length / itemsPerPage); // Calculate total pages based on data length
+      setShowTableData(data.slice(startIndex, endIndex));
+    }
+  }, [data]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setShowTableData(data.slice(startIndex, endIndex));
+  }
+
   // Function to fetch the access token
   const fetchAccessToken = async () => {
-    const username = "b2c.ps.user.uat";  
-    const password = "Welcome@1234";  
-  
+    const username = "b2c.ps.user.uat";
+    const password = "Welcome@1234";
+
     try {
       const response = await axios.post(
-        'https://iii-sandbox-sg.insuremo.com/cas/ebao/v2/json/tickets',
+        "https://iii-sandbox-sg.insuremo.com/cas/ebao/v2/json/tickets",
         {
-          username: username,  
-          password: password,  
+          username: username,
+          password: password,
         },
         {
           headers: {
-            "Content-Type": "application/json",  
-            "x-mo-client-id": "key",  
-            "x-mo-tenant-id": "iii",  
-            "x-mo-user-source-id": "platform",  
-          }
+            "Content-Type": "application/json",
+            "x-mo-client-id": "key",
+            "x-mo-tenant-id": "iii",
+            "x-mo-user-source-id": "platform",
+          },
         }
       );
-  
+
       console.log("response", response);
-  
-    
+
       const token = response.data.access_token;
-      
-      
+
       setAccessToken(token);
-      localStorage.setItem('access_token', token);
-  
+      localStorage.setItem("access_token", token);
     } catch (error) {
-      console.error('Error fetching access token:', error);
+      console.error("Error fetching access token:", error);
     }
   };
- 
+
   // Function to fetch data using the access token
   const fetchDataWithToken = async () => {
     if (!accessToken) {
-      console.error('No access token available');
+      console.error("No access token available");
       return;
     }
-  
+
     const FromDate = "2024-09-18";
-    const ToDate = "2024-09-30";   
-  
+    const ToDate = "2024-09-30";
+
     // Validate that the date difference is <= 31 days
     const date1 = new Date(FromDate);
     const date2 = new Date(ToDate);
     const diffInTime = date2 - date1;
     const diffInDays = diffInTime / (1000 * 3600 * 24);
- 
+
     console.log("diffInDays", diffInDays);
-  
+
     if (diffInDays > 31) {
-      console.error('Date difference should be less than or equal to 31 days.');
+      console.error("Date difference should be less than or equal to 31 days.");
       return;
     }
-  
+
     try {
       const response = await axios.post(
-        'https://sandbox-sg-gw.insuremo.com/iii/v1/iii-bff-app/searchPolicyByDate',
+        "https://sandbox-sg-gw.insuremo.com/iii/v1/iii-bff-app/searchPolicyByDate",
         {
           FromDate,
           ToDate,
@@ -80,38 +97,36 @@ const PolicyTable = () => {
           },
         }
       );
-   
-      setData(response.data);
+
+      setData(response.data?.ResultList);
     } catch (error) {
-      console.error('Error fetching data with token:', error);
+      console.error("Error fetching data with token:", error);
     }
   };
- 
- 
+
   useEffect(() => {
     fetchAccessToken();
   }, []);
- 
- 
+
   useEffect(() => {
     if (accessToken) {
       fetchDataWithToken();
     }
   }, [accessToken]);
- 
-   // Get the current date and time
-   const currentDate = new Date();
- 
-   const isNearExpiry = (expiryDate) => {
+
+  // Get the current date and time
+  const currentDate = new Date();
+
+  const isNearExpiry = (expiryDate) => {
     const expiry = new Date(expiryDate);
     const timeDifference = expiry - currentDate;
     const daysRemaining = timeDifference / (1000 * 3600 * 24); // convert to days
- 
+
     return daysRemaining <= 7 && daysRemaining > 0; // Near expiry: within 7 days
   };
- 
-console.log("accessToken", accessToken);
-console.log("responseresponse data", data);
+
+  console.log("accessToken", accessToken);
+  console.log("responseresponse data", data);
   return (
     <div className="bg-white overflow-x-auto mt-4">
       <table className="w-full min-w-[600px] border-collapse">
@@ -138,10 +153,10 @@ console.log("responseresponse data", data);
             </th>
           </tr>
         </thead>
- 
+
         {/* Table Body */}
         <tbody>
-          {data?.ResultList.slice(0, 15).map((list, index) => (
+          {showTableData.map((list, index) => (
             <tr
               key={index}
               className="border-b border-[#EAECF0] hover:bg-gray-50 text-[14px]"
@@ -166,7 +181,7 @@ console.log("responseresponse data", data);
                     Inforce
                   </span>
                 )}
-                {isNearExpiry(list.ExpiryDate) &&  (
+                {isNearExpiry(list.ExpiryDate) && (
                   <span
                     className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expiring`}
                   >
@@ -211,43 +226,15 @@ console.log("responseresponse data", data);
           ))}
         </tbody>
       </table>
- 
+
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mt-3 p-3 space-y-2 sm:space-y-0">
-        <button className="flex items-center gap-1 px-2 py-1 border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt">
-          <Image
-            className=""
-            src="/images/left-arrow.png"
-            alt="icon"
-            width={14}
-            height={14}
-          />{" "}
-          Previous
-        </button>
-        <div className="flex space-x-2 text-[14px]">
-          <button className="px-3 cursor-pointer py-2 rounded-md selected-pagination">
-            1
-          </button>
-          <button className="px-3 cursor-pointer py-2 rounded-md">2</button>
-          <button className="px-3 cursor-pointer py-2 rounded-md">3</button>
-          <span className="px-3 py-2">...</span>
-          <button className="px-3 cursor-pointer py-2 rounded-md">8</button>
-          <button className="px-3 cursor-pointer py-2 rounded-md">9</button>
-          <button className="px-3 cursor-pointer py-2 rounded-md">10</button>
-        </div>
-        <button className="flex items-center gap-1 px-2 py-1 cursor-pointer border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt">
-          Next{" "}
-          <Image
-            className=""
-            src="/images/right-arrow.png"
-            alt="icon"
-            width={14}
-            height={14}
-          />
-        </button>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => handlePageChange(page)}
+      />
     </div>
   );
 };
- 
+
 export default PolicyTable;
