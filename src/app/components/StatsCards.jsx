@@ -14,7 +14,7 @@ const StatsCards = () => {
     return (
         <div className="relative border-t-1 border-[#6690F3]">
             <div className="absolute z-1 top-0 left-0 w-full bg-[#006BB7] h-[250px]"></div>
-            <div className="container mx-auto pt-6 relative z-10 px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto pt-6 relative z-10 px-4 sm:px-6">
                 <div className="text-white flex flex-col sm:flex-row justify-between items-start sm:items-end mt-3 gap-4">
                     {/* Left Side: Total Sales */}
                     <div>
