@@ -1,31 +1,117 @@
+import React, { useState, useEffect } from 'react';
 import Image from "next/image";
-import React from "react";
-
-const policies = [
-  {
-    policyNumber: "WRESDFGHVB45678",
-    insuredName: "ABC Logistic",
-    policyType: "Maid Insurance",
-    status: "INFORCE",
-    effectiveDate: "Jan 4, 2022",
-  },
-  {
-    policyNumber: "WRESDFGHVB45678",
-    insuredName: "ABC Logistic",
-    policyType: "Home Insurance",
-    status: "EXPIRING",
-    effectiveDate: "Jan 4, 2022",
-  },
-  {
-    policyNumber: "WRESDFGHVB45678",
-    insuredName: "ABC Logistic",
-    policyType: "Maid Insurance",
-    status: "EXPIRED",
-    effectiveDate: "Jan 2, 2022",
-  },
-];
-
+import axios from 'axios';
+ 
+ 
 const PolicyTable = () => {
+  const [accessToken, setAccessToken] = useState(null);
+  const [data, setData] = useState(null);
+ 
+  // Function to fetch the access token
+  const fetchAccessToken = async () => {
+    const username = "b2c.ps.user.uat";  
+    const password = "Welcome@1234";  
+  
+    try {
+      const response = await axios.post(
+        'https://iii-sandbox-sg.insuremo.com/cas/ebao/v2/json/tickets',
+        {
+          username: username,  
+          password: password,  
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",  
+            "x-mo-client-id": "key",  
+            "x-mo-tenant-id": "iii",  
+            "x-mo-user-source-id": "platform",  
+          }
+        }
+      );
+  
+      console.log("response", response);
+  
+    
+      const token = response.data.access_token;
+      
+      
+      setAccessToken(token);
+      localStorage.setItem('access_token', token);
+  
+    } catch (error) {
+      console.error('Error fetching access token:', error);
+    }
+  };
+ 
+  // Function to fetch data using the access token
+  const fetchDataWithToken = async () => {
+    if (!accessToken) {
+      console.error('No access token available');
+      return;
+    }
+  
+    const FromDate = "2024-09-18";
+    const ToDate = "2024-09-30";   
+  
+    // Validate that the date difference is <= 31 days
+    const date1 = new Date(FromDate);
+    const date2 = new Date(ToDate);
+    const diffInTime = date2 - date1;
+    const diffInDays = diffInTime / (1000 * 3600 * 24);
+ 
+    console.log("diffInDays", diffInDays);
+  
+    if (diffInDays > 31) {
+      console.error('Date difference should be less than or equal to 31 days.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        'https://sandbox-sg-gw.insuremo.com/iii/v1/iii-bff-app/searchPolicyByDate',
+        {
+          FromDate,
+          ToDate,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+   
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data with token:', error);
+    }
+  };
+ 
+ 
+  useEffect(() => {
+    fetchAccessToken();
+  }, []);
+ 
+ 
+  useEffect(() => {
+    if (accessToken) {
+      fetchDataWithToken();
+    }
+  }, [accessToken]);
+ 
+   // Get the current date and time
+   const currentDate = new Date();
+ 
+   const isNearExpiry = (expiryDate) => {
+    const expiry = new Date(expiryDate);
+    const timeDifference = expiry - currentDate;
+    const daysRemaining = timeDifference / (1000 * 3600 * 24); // convert to days
+ 
+    return daysRemaining <= 7 && daysRemaining > 0; // Near expiry: within 7 days
+  };
+ 
+console.log("accessToken", accessToken);
+console.log("responseresponse data", data);
   return (
     <div className="bg-white overflow-x-auto mt-4">
       <table className="w-full min-w-[600px] border-collapse">
@@ -52,21 +138,21 @@ const PolicyTable = () => {
             </th>
           </tr>
         </thead>
-
+ 
         {/* Table Body */}
         <tbody>
-          {policies.map((policy, index) => (
+          {data?.ResultList.slice(0, 15).map((list, index) => (
             <tr
               key={index}
               className="border-b border-[#EAECF0] hover:bg-gray-50 text-[14px]"
             >
               <td className="p-3 text-[#101828] whitespace-nowrap">
-                {policy.policyNumber}
+                {list.PolicyNo}
               </td>
-              <td className="p-3 text-[#475467]">{policy.insuredName}</td>
-              <td className="p-3 text-[#475467]">{policy.policyType}</td>
+              <td className="p-3 text-[#475467]">{list.CustomerName}</td>
+              <td className="p-3 text-[#475467]">{list.ProductName}</td>
               <td className="p-3 text-[#475467]">
-                {policy.status === "INFORCE" && (
+                {currentDate <= new Date(list.ExpiryDate) && (
                   <span
                     className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-inforce`}
                   >
@@ -80,7 +166,7 @@ const PolicyTable = () => {
                     Inforce
                   </span>
                 )}
-                {policy.status === "EXPIRING" && (
+                {isNearExpiry(list.ExpiryDate) &&  (
                   <span
                     className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expiring`}
                   >
@@ -94,7 +180,7 @@ const PolicyTable = () => {
                     Expiring soon
                   </span>
                 )}
-                {policy.status === "EXPIRED" && (
+                {currentDate > new Date(list.ExpiryDate) && (
                   <span
                     className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expired`}
                   >
@@ -109,7 +195,7 @@ const PolicyTable = () => {
                   </span>
                 )}
               </td>
-              <td className="p-3 text-[#475467]">{policy.effectiveDate}</td>
+              <td className="p-3 text-[#475467]">{list.EffectiveDate}</td>
               <td className="p-3 text-[#475467] text-center flex justify-center space-x-2">
                 <button className="text-gray-500 hover:text-blue-500 cursor-pointer">
                   <Image
@@ -125,7 +211,7 @@ const PolicyTable = () => {
           ))}
         </tbody>
       </table>
-
+ 
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row justify-between items-center mt-3 p-3 space-y-2 sm:space-y-0">
         <button className="flex items-center gap-1 px-2 py-1 border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt">
@@ -163,5 +249,5 @@ const PolicyTable = () => {
     </div>
   );
 };
-
+ 
 export default PolicyTable;
