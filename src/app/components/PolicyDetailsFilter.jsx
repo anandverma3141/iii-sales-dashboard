@@ -16,15 +16,15 @@ const PolicyDetailsFilter = () => {
   };
 
   return (
-    <div className="mt-5 flex items-end justify-between space-x-3">
+    <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
       {/* Search Input */}
-      <div className="relative flex items-center">
+      <div className="relative flex items-center w-full sm:w-auto">
         <input
           type="text"
           placeholder="Search"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] w-[325px] focus:ring focus:ring-blue-200 focus:outline-none"
+          className="border border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] w-full sm:w-[325px] focus:ring focus:ring-blue-200 focus:outline-none"
         />
 
         <Image
@@ -37,12 +37,12 @@ const PolicyDetailsFilter = () => {
       </div>
 
       {/* Select Policy Type */}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-[14px] text-[#556B82]">Select Policy Type</label>
         <select
           value={policyType}
           onChange={(e) => setPolicyType(e.target.value)}
-          className="border  border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] focus:ring focus:ring-blue-200 focus:outline-none"
+          className="border border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] focus:ring focus:ring-blue-200 focus:outline-none"
         >
           <option value="All">All</option>
           <option value="Maid">Maid Insurance</option>
@@ -52,18 +52,19 @@ const PolicyDetailsFilter = () => {
       </div>
 
       {/* Policy Number Input */}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-[14px] text-[#556B82]">Policy Number</label>
         <input
           type="text"
           placeholder="Enter Policy Number"
           value={policyNumber}
           onChange={(e) => setPolicyNumber(e.target.value)}
-          className="border  border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] focus:ring focus:ring-blue-200 focus:outline-none"
+          className="border border-[#BFE9E5] rounded-sm px-2 py-1 pr-8 text-[12px] focus:ring focus:ring-blue-200 focus:outline-none"
         />
       </div>
 
-      <div className="relative flex flex-col">
+      {/* Documents Issued */}
+      <div className="relative flex flex-col w-full sm:w-auto">
         <label className="text-[14px] text-[#556B82]">Documents Issued</label>
 
         {/* Date Input */}
@@ -86,7 +87,8 @@ const PolicyDetailsFilter = () => {
         />
       </div>
 
-      <div className="relative flex flex-end items-end gap-2">
+      {/* Buttons */}
+      <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-end">
         {/* Search Button */}
         <button className="bg-[#EBEDF0] text-[#999999] px-2 py-1 rounded-lg text-[14px] hover:bg-gray-300 cursor-pointer">
           Search

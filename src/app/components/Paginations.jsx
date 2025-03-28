@@ -60,9 +60,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={currentPage === 1}
       >
         <Image src="/images/left-arrow.png" alt="icon" width={14} height={14} />
-        Previous
+        <span className="hidden sm:inline">Previous</span>
       </button>
-      <div className="flex space-x-2 text-[14px]">{renderPageNumbers()}</div>
+      <div className="flex flex-wrap justify-center space-x-2 text-[14px]">
+        {renderPageNumbers()}
+      </div>
 
       <button
         className={`flex items-center gap-1 px-2 py-1 border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt ${
@@ -71,7 +73,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Next
+        <span className="hidden sm:inline">Next</span>
         <Image
           src="/images/right-arrow.png"
           alt="icon"
