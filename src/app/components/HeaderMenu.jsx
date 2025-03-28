@@ -5,16 +5,16 @@ import React, { useState } from "react";
 
 const HeaderMenu = () => {
   return (
-    <nav className="bg-[#006BB7]">
+    <nav className="bg-[#006BB7]  pt-[20px] md:pt-0">
       <div className="mx-auto flex items-center justify-between px-8 text-white">
-        <div className="flex items-center gap-[350px]">
+        <div className="flex items-center gap-[200px] lg:gap-[350px]">
           {/* Left - Logo */}
           <div className="flex items-center gap-2">
             <Link href="/">
               <Image src="/images/logo.png" alt="Logo" width={93} height={35} />
             </Link>
           </div>
-          <nav>
+          <nav className="hidden md:block">
             <ul className="flex items-center gap-8">
               <li>
                 <Link
@@ -31,7 +31,10 @@ const HeaderMenu = () => {
                 </Link>
               </li>
               <li>
-                <Link className="flex items-center gap-2 h-[80px] text-[16px] " href="/">
+                <Link
+                  className="flex items-center gap-2 h-[80px] text-[16px] "
+                  href="/"
+                >
                   <Image
                     src="/images/hugeicons_note.png"
                     alt="notification"
@@ -69,6 +72,46 @@ const HeaderMenu = () => {
             className="rounded-full border border-white cursor-pointer"
           />
         </div>
+      </div>
+      <div className="md:hidden text-white">
+        <nav className="flex items-center justify-center">
+          <ul className="flex items-center gap-8">
+            <li>
+              <Link
+                className="flex items-center gap-2 h-[80px] text-[16px] selected"
+                href="/"
+              >
+                <Image
+                  src="/images/solar_graph-linear.png"
+                  alt="Revenue"
+                  width={19}
+                  height={19}
+                />{" "}
+                Sales Revenue
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="flex items-center gap-2 h-[80px] text-[16px] "
+                href="/"
+              >
+                <Image
+                  src="/images/hugeicons_note.png"
+                  alt="notification"
+                  width={24}
+                  height={24}
+                />{" "}
+                All Products{" "}
+                <Image
+                  src="/images/down-icon.png"
+                  alt="icon"
+                  width={11}
+                  height={6}
+                />
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </div>
     </nav>
   );

@@ -25,7 +25,7 @@ const PolicyTable = () => {
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     setShowTableData(data.slice(startIndex, endIndex));
-  }
+  };
 
   // Function to fetch the access token
   const fetchAccessToken = async () => {
@@ -128,105 +128,106 @@ const PolicyTable = () => {
   console.log("accessToken", accessToken);
   console.log("responseresponse data", data);
   return (
-    <div className="bg-white overflow-x-auto mt-4">
-      <table className="w-full min-w-[600px] border-collapse">
-        {/* Table Head */}
-        <thead className="bg-[#F9FAFB] sticky top-0">
-          <tr className="border-b border-[#EAECF0]">
-            <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
-              Policy Number
-            </th>
-            <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
-              Insured Name
-            </th>
-            <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
-              Policy Type
-            </th>
-            <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
-              Status
-            </th>
-            <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
-              Effective Date
-            </th>
-            <th className="p-3 text-center text-[#475467] text-[12px] font-semibold">
-              View Policy
-            </th>
-          </tr>
-        </thead>
-
-        {/* Table Body */}
-        <tbody>
-          {showTableData.map((list, index) => (
-            <tr
-              key={index}
-              className="border-b border-[#EAECF0] hover:bg-gray-50 text-[14px]"
-            >
-              <td className="p-3 text-[#101828] whitespace-nowrap">
-                {list.PolicyNo}
-              </td>
-              <td className="p-3 text-[#475467]">{list.CustomerName}</td>
-              <td className="p-3 text-[#475467]">{list.ProductName}</td>
-              <td className="p-3 text-[#475467]">
-                {currentDate <= new Date(list.ExpiryDate) && (
-                  <span
-                    className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-inforce`}
-                  >
-                    <Image
-                      className=""
-                      src="/images/icon-inforce.png"
-                      alt="icon"
-                      width={13}
-                      height={8}
-                    />{" "}
-                    Inforce
-                  </span>
-                )}
-                {isNearExpiry(list.ExpiryDate) && (
-                  <span
-                    className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expiring`}
-                  >
-                    <Image
-                      className=""
-                      src="/images/icon-expiring.png"
-                      alt="icon"
-                      width={13}
-                      height={13}
-                    />{" "}
-                    Expiring soon
-                  </span>
-                )}
-                {currentDate > new Date(list.ExpiryDate) && (
-                  <span
-                    className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expired`}
-                  >
-                    <Image
-                      className=""
-                      src="/images/icon-expired.png"
-                      alt="icon"
-                      width={8}
-                      height={8}
-                    />{" "}
-                    Expired
-                  </span>
-                )}
-              </td>
-              <td className="p-3 text-[#475467]">{list.EffectiveDate}</td>
-              <td className="p-3 text-[#475467] text-center flex justify-center space-x-2">
-                <button className="text-gray-500 hover:text-blue-500 cursor-pointer">
-                  <Image
-                    className=""
-                    src="/images/download-icon.png"
-                    alt="icon"
-                    width={19}
-                    height={18}
-                  />
-                </button>
-              </td>
+    <div className="bg-white mt-4">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px] border-collapse">
+          {/* Table Head */}
+          <thead className="bg-[#F9FAFB] sticky top-0">
+            <tr className="border-b border-[#EAECF0]">
+              <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
+                Policy Number
+              </th>
+              <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
+                Insured Name
+              </th>
+              <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
+                Policy Type
+              </th>
+              <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
+                Status
+              </th>
+              <th className="p-3 text-left text-[#475467] text-[12px] font-semibold">
+                Effective Date
+              </th>
+              <th className="p-3 text-center text-[#475467] text-[12px] font-semibold">
+                View Policy
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
+          {/* Table Body */}
+          <tbody>
+            {showTableData.map((list, index) => (
+              <tr
+                key={index}
+                className="border-b border-[#EAECF0] hover:bg-gray-50 text-[14px]"
+              >
+                <td className="p-3 text-[#101828] whitespace-nowrap">
+                  {list.PolicyNo}
+                </td>
+                <td className="p-3 text-[#475467]">{list.CustomerName}</td>
+                <td className="p-3 text-[#475467]">{list.ProductName}</td>
+                <td className="p-3 text-[#475467]">
+                  {currentDate <= new Date(list.ExpiryDate) && (
+                    <span
+                      className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-inforce`}
+                    >
+                      <Image
+                        className=""
+                        src="/images/icon-inforce.png"
+                        alt="icon"
+                        width={13}
+                        height={8}
+                      />{" "}
+                      Inforce
+                    </span>
+                  )}
+                  {isNearExpiry(list.ExpiryDate) && (
+                    <span
+                      className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expiring`}
+                    >
+                      <Image
+                        className=""
+                        src="/images/icon-expiring.png"
+                        alt="icon"
+                        width={13}
+                        height={13}
+                      />{" "}
+                      Expiring soon
+                    </span>
+                  )}
+                  {currentDate > new Date(list.ExpiryDate) && (
+                    <span
+                      className={`flex items-center gap-2 justify-self-start px-2 py-1 text-sm font-medium rounded-[50px] pocily-status-expired`}
+                    >
+                      <Image
+                        className=""
+                        src="/images/icon-expired.png"
+                        alt="icon"
+                        width={8}
+                        height={8}
+                      />{" "}
+                      Expired
+                    </span>
+                  )}
+                </td>
+                <td className="p-3 text-[#475467]">{list.EffectiveDate}</td>
+                <td className="p-3 text-[#475467] text-center flex justify-center space-x-2">
+                  <button className="text-gray-500 hover:text-blue-500 cursor-pointer">
+                    <Image
+                      className=""
+                      src="/images/download-icon.png"
+                      alt="icon"
+                      width={19}
+                      height={18}
+                    />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}

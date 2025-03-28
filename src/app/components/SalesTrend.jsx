@@ -36,11 +36,12 @@ export default function SalesTrend() {
     salesTrandFilterProducts,
     salesTrandFilterTime,
   } = selectOptions;
+
   return (
     <div className="w-full bg-white p-4 rounded-lg shadow-md">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <h3 className="text-lg font-bold">Sales Trend</h3>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <CustomSelect options={salesTrandFilterRegion} />
           <CustomSelect options={salesTrandFilterProducts} />
           <CustomSelect options={salesTrandFilterTime} />
