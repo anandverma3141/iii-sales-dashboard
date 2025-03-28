@@ -36,6 +36,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Inter 24pt';
+  src: url('/fonts/Inter24pt-SemiBold.woff2') format('woff2'),
+      url('/fonts/Inter24pt-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -67,7 +76,7 @@ body {
 
 .selected {
   position: relative;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .selected::after {
@@ -109,4 +118,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"] {
   appearance: none;
   -moz-appearance: textfield;
+}
+
+.font-inter-24pt {
+  font-family: "Inter 24pt", sans-serif;
 }
