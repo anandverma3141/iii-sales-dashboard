@@ -128,7 +128,7 @@ const PolicyTable = () => {
 
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row justify-between items-center mt-3 p-3 space-y-2 sm:space-y-0">
-        <button className="flex items-center gap-1 px-2 py-1 border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer">
+        <button className="flex items-center gap-1 px-2 py-1 border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt">
           <Image
             className=""
             src="/images/left-arrow.png"
@@ -149,7 +149,7 @@ const PolicyTable = () => {
           <button className="px-3 cursor-pointer py-2 rounded-md">9</button>
           <button className="px-3 cursor-pointer py-2 rounded-md">10</button>
         </div>
-        <button className="flex items-center gap-1 px-2 py-1 cursor-pointer border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100">
+        <button className="flex items-center gap-1 px-2 py-1 cursor-pointer border border-[#D5D7DA] rounded-md text-[#414651] text-[14px] hover:bg-gray-100 cursor-pointer font-inter-24pt">
           Next{" "}
           <Image
             className=""
